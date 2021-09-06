@@ -1,5 +1,6 @@
-const char* ssid = "ESP32_ROBv1"; //Enter SSID
-const char* password = "yourpasswd"; //Enter Password
+const char* ssid = "Joystick"; //Enter SSID
+const char* password = "1234567890"; //Enter Password
+
 
 #define AIN1 13
 #define BIN1 12
@@ -14,8 +15,8 @@ const char* password = "yourpasswd"; //Enter Password
 const int offsetA = 1;
 const int offsetB = 1;
 
-Motor motor2 = Motor(AIN1, AIN2, PWMA, offsetA, STBY,5000 ,8,1 );
-Motor motor1 = Motor(BIN1, BIN2, PWMB, offsetB, STBY,5000 ,8,2 );
+//Motor motor2 = Motor(AIN1, AIN2, PWMA, offsetA, STBY,5000 ,8,1 );
+//Motor motor1 = Motor(BIN1, BIN2, PWMB, offsetB, STBY,5000 ,8,2 );
  
 using namespace websockets;
 WebsocketsServer server;

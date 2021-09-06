@@ -1,9 +1,15 @@
 #include <Arduino.h>
 #include "Arduino.h"
 #include <ArduinoWebsockets.h>
-#include <WiFi.h>
+
+#if defined(ESP32)
+  #include <WiFi.h>
+#else
+  #include <ESP8266WiFi.h>
+#endif
+
 #include <ESPAsyncWebServer.h>
-#include <TB6612_ESP32.h>
+//#include <TB6612_ESP32.h>
 
 #include "config.h"
 #include "web.h"
@@ -25,7 +31,7 @@
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
 
   // Create AP
   WiFi.softAP(ssid, password);
@@ -43,7 +49,7 @@ void setup()
   // start server
   webserver.begin();
   server.listen(82);
-  Serial.print("Is server live? ");
+  Serial.print("Server status: ");
   Serial.println(server.available());
  
 }
@@ -53,8 +59,9 @@ void handle_message(WebsocketsMessage msg) {
   commaIndex = msg.data().indexOf(',');
   LValue = msg.data().substring(0, commaIndex).toInt();
   RValue = msg.data().substring(commaIndex + 1).toInt();
-  motor1.drive(LValue);
-  motor2.drive(RValue);
+  Serial.println("L: "+ String(LValue) + " R: " + String(RValue) );
+  //motor1.drive(LValue);
+  //motor2.drive(RValue);
 }
  
 void loop()
