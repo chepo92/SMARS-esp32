@@ -9,7 +9,9 @@
 #endif
 
 #include <ESPAsyncWebServer.h>
+
 //#include <TB6612_ESP32.h>
+#include <L298NX2.h>
 
 #include "config.h"
 #include "web.h"
@@ -29,6 +31,39 @@
     Adapted by Manos Zeakis for ESP32 and TB6612FNG
 */
 
+int pwm_A=D1;//Right side 
+int pwm_B=D2;//Left side 
+int dir_A=D3;//Right reverse 
+int dir_B=D4;//Left reverse 
+
+L298NX2 myMotors(pwm_A, dir_A, pwm_B, dir_B);
+
+void setSpeedDirFromSigned(int speed_dir_A, int speed_dir_B) { 
+  
+  if (speed_dir_A>0){
+    //     myMotors.setSpeedA(speed_dir_A); 
+    digitalWrite(pwm_A, HIGH); 
+    digitalWrite(dir_A, HIGH ); 
+  } else if (speed_dir_A<0){
+    digitalWrite(pwm_A, HIGH); 
+    digitalWrite(dir_A, LOW); 
+  }
+  else{
+    digitalWrite(pwm_A, LOW); 
+  }
+
+  if (speed_dir_B>0){
+//     myMotors.setSpeedB(speed_dir_B); 
+    digitalWrite(pwm_B, HIGH); 
+    digitalWrite(dir_B, HIGH); 
+  } else if (speed_dir_B<0){
+    digitalWrite(pwm_B, HIGH); 
+    digitalWrite(dir_B, LOW); 
+  } else{
+    digitalWrite(pwm_B, LOW); 
+  }
+}
+
 void setup()
 {
   Serial.begin(115200);
@@ -41,9 +76,10 @@ void setup()
 
   // HTTP handler assignment
   webserver.on("/", HTTP_GET, [](AsyncWebServerRequest * request) {
-    AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", index_html_gz, sizeof(index_html_gz));
-    response->addHeader("Content-Encoding", "gzip");
-    request->send(response);
+    AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", index_html);
+    // response->addHeader("Content-Encoding", "gzip");
+    response->addHeader("Server","ESP Async Web Server");
+    request->send(response);    
   });
 
   // start server
@@ -60,6 +96,7 @@ void handle_message(WebsocketsMessage msg) {
   LValue = msg.data().substring(0, commaIndex).toInt();
   RValue = msg.data().substring(commaIndex + 1).toInt();
   Serial.println("L: "+ String(LValue) + " R: " + String(RValue) );
+  setSpeedDirFromSigned(LValue, RValue);
   //motor1.drive(LValue);
   //motor2.drive(RValue);
 }
@@ -72,3 +109,5 @@ void loop()
     client.poll();
   }
 }
+
+
