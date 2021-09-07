@@ -1,10 +1,10 @@
-# ESP32 Wifi Tank web control code
+# ESP Wifi web control code
 
-Esp32 webserver robot tank control. Uses only one Jostick to control the movement. Based on TB6612FNG motor driver and smars project robot, uses async HTML protocol. 
+Esp 8266/32 webserver robot tank control. Uses only one Jostick to control the movement. Can be used and extended to any robot project RC car, uses async HTML protocol. 
 
 ## Configuration
 
-You need to modify your password and SSID to a personal one, and set your TB6612FNG Driver pins.
+You need to modify your password and SSID to a personal one, and set your the motor Driver pins.
 
 src/config.h contains the setup.
 
