@@ -169,8 +169,6 @@ static const char PROGMEM index_html  [] = R"(
         nMotMixR = (1.0 - fPivScale) * nMotPremixR + fPivScale * (-nPivSpeed);
 
 
-
-
         return Math.round(nMotMixL * 2.55) + "," + Math.round(nMotMixR * 2.55);   // The function returns the product of p1 and p2
     }
 
