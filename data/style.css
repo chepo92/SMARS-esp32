@@ -65,8 +65,13 @@ body
     min-width: 300px;
 }
 
-#joystick
-{
-    border: 1px solid #FF0000;
+
+#info{
+    /* display: inline-block; */
+    text-align: center;
 }
 
+#joyDiv {
+	/* display: inline-block; */
+    text-align: center;
+}

@@ -134,6 +134,10 @@ void setup()
     request->send(SPIFFS, "/script.js", "text/javascript");
   });  
 
+  webserver.on("/joy.js", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(SPIFFS, "/joy.js", "text/javascript");
+  });  
+
 
   // start server
   webserver.begin();
