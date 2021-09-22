@@ -1,16 +1,12 @@
 <!DOCTYPE html>
 
 <html>
-
-    <link rel="stylesheet" type="text/css" src='./style.css' >
-    <script type='text/javascript' src='./script.js'></script>
-
 <head>
     <meta name='viewport' content='width=device-width,initial-scale=1.0,user-scalable=no' />
     <meta charset="utf-8" />
-
-
-
+    <link rel="stylesheet" type="text/css" src='./style.css' >
+    <script type='text/javascript' src='./joy.js'></script>
+    <script type='text/javascript' src='./script.js'></script>
     <title>Joystick test</title>
 
 </head>
@@ -21,8 +17,92 @@
         <div style="height: 40vh;"></div>
         <div id="joyDiv" style="width:200px;height:200px;margin:auto;"></div>
 
+		<div style="position:fixed;bottom:70px;left:900px;">
+			Pos X:<input id="joyPosX" type="text" /><br />
+			Pos Y:<input id="joyPosY" type="text" /><br />
+			Dir:<input id="joyDir" type="text" /><br />
+			X :<input id="joyX" type="text" /></br>
+			Y :<input id="joyY" type="text" />
+		</div>
     </div>
 
 </body>
+
+<script>
+
+// Create JoyStick object into the DIV 'joyDiv'
+var joy = new JoyStick('joyDiv');
+var inputPosX = document.getElementById("posizioneX");
+var inputPosY = document.getElementById("posizioneY");
+var direzione = document.getElementById("direzione");
+var fuerzaI = document.getElementById("fuerzaI");
+var fuerzaD = document.getElementById("fuerzaD");
+var x = document.getElementById("X");
+var y = document.getElementById("Y");
+
+var joyIinputPosX = document.getElementById("joyPosX");
+var joyInputPosY = document.getElementById("joyPosY");
+var joyDirezione = document.getElementById("joyDir");
+var joyX = document.getElementById("joyX");
+var joyY = document.getElementById("joyY");
+
+setInterval(function(){ joyIinputPosX.value=joy.GetPosX(); }, 50);
+setInterval(function(){ joyInputPosY.value=joy.GetPosY(); }, 50);
+setInterval(function(){ joyDirezione.value=joy.GetDir(); }, 50);
+setInterval(function(){ joyX.value=joy.GetX(); }, 50);
+setInterval(function(){ joyY.value=joy.GetY(); }, 50);
+
+
+//Steering control program, based on :
+// Differential Steering Joystick Algorithm
+//   by Calvin Hass
+//   https://www.impulseadventure.com/elec/
+
+function getfuerza(nJoyX, nJoyY) {
+    var nMotMixL;
+    var nMotMixR;
+    var fPivYLimit = 32.0; //The threshold at which the pivot action starts
+    //                This threshold is measured in units on the Y-axis
+    //                away from the X-axis (Y=0). A greater value will assign
+    //                more of the joystick's range to pivot actions.
+    //                Allowable range: (0..+127)
+
+    // TEMP VARIABLES
+    var nMotPremixL;    // Motor (left)  premixed output        (-128..+127)
+    var nMotPremixR;    // Motor (right) premixed output        (-128..+127)
+    var nPivSpeed;      // Pivot Speed                          (-128..+127)
+    var fPivScale;      // Balance scale b/w drive and pivot    (   0..1   )
+
+    // Calculate Drive Turn output due to Joystick X input
+    if (nJoyY >= 0) {
+        // Forward
+        nMotPremixL = (nJoyX >= 0 ? 100.0 : 100.0 + parseFloat(nJoyX));
+        nMotPremixR = (nJoyX >= 0 ? 100.0 - nJoyX : 100.0);
+    } else {
+        // Reverse
+        nMotPremixL = (nJoyX >= 0 ? 100.0 - nJoyX : 100.0);
+        nMotPremixR = (nJoyX >= 0 ? 100.0 : 100.0 + parseFloat(nJoyX));
+    }
+
+    // Scale Drive output due to Joystick Y input (throttle)
+    nMotPremixL = nMotPremixL * nJoyY / 100.0;
+    nMotPremixR = nMotPremixR * nJoyY / 100.0;
+
+    // Now calculate pivot amount
+    // - Strength of pivot (nPivSpeed) based on Joystick X input
+    // - Blending of pivot vs drive (fPivScale) based on Joystick Y input
+    nPivSpeed = nJoyX;
+    fPivScale = (Math.abs(nJoyY) > fPivYLimit) ? 0.0 : (1.0 - Math.abs(nJoyY) / fPivYLimit);
+
+    // Calculate final mix of Drive and Pivot
+    nMotMixL = (1.0 - fPivScale) * nMotPremixL + fPivScale * (nPivSpeed);
+    nMotMixR = (1.0 - fPivScale) * nMotPremixR + fPivScale * (-nPivSpeed);
+
+    return Math.round(nMotMixL * 2.55) + "," + Math.round(nMotMixR * 2.55);   // The function returns the product of p1 and p2
+}
+
+setInterval(function () { send(getfuerza(joy.GetX(), joy.GetY())); }, 300);
+
+</script>
 
 </html>
