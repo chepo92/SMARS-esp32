@@ -14,7 +14,8 @@
 #include <L298NX2.h>
 
 #include "config.h"
-#include "web.h"
+// #include "web.h"
+// #include "SPIFFS.h"
 
 /** ESP32 robot tank with wifi and one joystick web control sketch. 
     Based on SMARS modular robot project using esp32 and tb6612.
@@ -31,10 +32,14 @@
     Adapted by Manos Zeakis for ESP32 and TB6612FNG
 */
 
-int pwm_A=D1;//Right side 
-int pwm_B=D2;//Left side 
-int dir_A=D3;//Right reverse 
-int dir_B=D4;//Left reverse 
+
+using namespace websockets;
+WebsocketsServer server;
+AsyncWebServer webserver(80);
+
+int LValue, RValue, commaIndex;
+
+
 
 L298NX2 myMotors(pwm_A, dir_A, pwm_B, dir_B);
 
@@ -95,6 +100,13 @@ void setup()
 {
   Serial.begin(115200);
 
+  // Mount 
+  if (!SPIFFS.begin())
+  {
+    Serial.println("An Error has occurred while mounting SPIFFS");
+    return;
+  }
+
   // Create AP
   WiFi.softAP(ssid, password);
   IPAddress IP = WiFi.softAPIP();
@@ -102,16 +114,32 @@ void setup()
   Serial.println(IP);
 
   // HTTP handler assignment
-  webserver.on("/", HTTP_GET, [](AsyncWebServerRequest * request) {
-    AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", index_html);
-    // response->addHeader("Content-Encoding", "gzip");
-    response->addHeader("Server","ESP Async Web Server");
-    request->send(response);    
+
+  // webserver.on("/", HTTP_GET, [](AsyncWebServerRequest * request) {
+  //   AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", index_html);
+  //   // response->addHeader("Content-Encoding", "gzip");
+  //   response->addHeader("Server","ESP Async Web Server");
+  //   request->send(response);    
+  // });
+
+  webserver.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(SPIFFS, "/index.html", "text/html");
   });
+
+  webserver.on("/style.css", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(SPIFFS, "/style.css", "text/css");
+  });
+
+  webserver.on("/script.js", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(SPIFFS, "/script.js", "text/javascript");
+  });  
+
 
   // start server
   webserver.begin();
   server.listen(82);
+
+  // Verbose
   Serial.print("Server status: ");
   Serial.println(server.available());
  
