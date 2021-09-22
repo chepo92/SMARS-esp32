@@ -15,6 +15,10 @@ You need to modify your password and SSID to a personal one, and set your motor 
 
 src/config.h contains the setup.
 
+## Recommended to compile using VS Code + PlatformIO
+
+## Use PIO Upload Filesystem Image to upload ./data content to spiffs 
+
 ## More info
 
 You can find more detailed info about how it works and hoy to modify it in the following [blog post](https://nkmakes.github.io/2020/09/02/esp32-tank-robot-joystick-http-web-control/), and see it in action in the following [youtube video](https://www.youtube.com/watch?v=uIImwilvI2s).
