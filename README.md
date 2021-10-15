@@ -11,13 +11,13 @@ Compatible with ESP8266 and ESP32
 
 ## Configuration
 
-You need to modify your password and SSID to a personal one, and set your motor Driver pins.
+You may want to modify your password and SSID to a personal one, and set motor Driver pins.
 
 src/config.h contains the setup.
 
 ## Recommended to compile using VS Code + PlatformIO
 
-## Use PIO Upload Filesystem Image to upload ./data content to spiffs 
+## Use PIO > Upload Filesystem Image to upload ./data content to SPIFFS 
 
 ## More info
 
