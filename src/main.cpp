@@ -115,7 +115,7 @@ void setup()
   WiFi.softAP(ssid, password);
   IPAddress IP = WiFi.softAPIP();
   Serial.println("Wifi Name: " + ssid);
-  Serial.println("Password: " + password);
+  Serial.println("Password: " + String(password) );
   Serial.println("AP IP address: ");
   Serial.println(IP);
 
