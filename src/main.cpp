@@ -99,7 +99,7 @@ void setSpeedDirFromSigned(int speed_dir_A, int speed_dir_B) {
 void setup()
 {
   Serial.begin(115200);
-
+  Serial.println("");
   // Mount 
   if (!SPIFFS.begin())
   {
@@ -107,10 +107,14 @@ void setup()
     return;
   }
 
+  // Create a unique wifi ssid
+  String chipId = String( ESP.getChipId());
+  String ssid = ssid_base + chipId;
+
   // Create AP
   WiFi.softAP(ssid, password);
   IPAddress IP = WiFi.softAPIP();
-  Serial.print("AP IP address: ");
+  Serial.println("AP IP address: ");
   Serial.println(IP);
 
   // HTTP handler assignment
