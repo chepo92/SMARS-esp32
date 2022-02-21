@@ -1,8 +1,8 @@
 # ESP RC Wifi Car web control
 
-Esp web control joystick. 
+NodeMcu ESP8266/ESP32 web control joystick. 
 
-Uses Jostick to control the movement of a robot/rc car. 
+Uses Joystick to control the movement of a robot/rc car. 
 Uses async HTML protocol. 
 
 ## Compatibility
@@ -15,13 +15,21 @@ You may want to modify your password and SSID to a personal one, and set motor D
 
 src/config.h contains the setup.
 
-## Recommended to compile using VS Code + PlatformIO
+## Build and upload 
 
-## Use PIO > Upload Filesystem Image to upload ./data content to SPIFFS 
+Note: Recommended to compile using VS Code + PlatformIO
+
+### Build and upload firmware
+
+Use PIO tools to build and upload
+
+### Upload Web UI files
+
+Use PIO > Upload Filesystem Image, that will upload ./data content to SPIFFS 
 
 ## More info
 
-You can find more detailed info about how it works and hoy to modify it in the following [blog post](https://nkmakes.github.io/2020/09/02/esp32-tank-robot-joystick-http-web-control/), and see it in action in the following [youtube video](https://www.youtube.com/watch?v=uIImwilvI2s).
+You can find more detailed info about how it works and hoy to modify it in the following [blog post](), and see it in action in the following [youtube video]().
 
 
 ## Used Libraries and acknowledgements
