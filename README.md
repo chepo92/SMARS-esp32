@@ -1,6 +1,6 @@
 # ESP Wifi web control code
 
-Esp 8266/32 webserver robot tank control. Uses only one Jostick to control the movement. Can be used and extended to any robot project RC car, uses async HTML protocol. 
+Esp 8266/32 webserver robot control. Uses only one Joystick to control the movement. Can be used and extended to any robot project RC car, uses async HTML protocol. 
 
 ## Configuration
 
